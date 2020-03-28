@@ -1,7 +1,8 @@
 {
-    "name": "devel/users-module",
+    "name": "devel/devel-users-module",
     "description": "Adds CRUD for users to devel/devel-dashboard-module",
     "type": "devel-module",
+    "license": "MIT",
     "authors": [
         {
             "name": "Alexander Zavyalov",
