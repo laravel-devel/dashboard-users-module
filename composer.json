@@ -1,0 +1,26 @@
+{
+    "name": "devel/users-module",
+    "description": "Adds CRUD for users to devel/devel-dashboard-module",
+    "type": "devel-module",
+    "authors": [
+        {
+            "name": "Alexander Zavyalov",
+            "email": "alex@voerro.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\DevelUsers\\Providers\\DevelUsersServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\DevelUsers\\": ""
+        }
+    }
+}
