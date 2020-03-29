@@ -155,7 +155,7 @@ class UsersController extends Controller
         }
 
         // The root role cannot be attached to anyone...
-        if ($request->has('roles') && array_search('root', $request->get('roles')) !== false) {
+        if ($request->get('roles') && is_array($request->get('roles')) && array_search('root', $request->get('roles')) !== false) {
             // ...unless the root user is being updated
             if (!$item || !$item->roles->contains('root')) {
                 $roles = $request->get('roles');

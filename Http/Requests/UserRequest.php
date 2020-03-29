@@ -31,7 +31,11 @@ class UserRequest extends FormRequest
                 'string',
                 'min:8',
             ],
-
+            'roles' => [
+                'sometimes',
+                'nullable',
+                'array',
+            ],
         ];
     }
 

@@ -66,6 +66,30 @@ class CrudTest extends TestCase
     }
 
     /** @test */
+    public function users_without_roles_can_be_created()
+    {
+        $data = [
+            'name' => 'user',
+            'email' => 'user@example.com',
+            'password' => 'qwerty1234',
+            'roles' => null,
+        ];
+
+        $this->assertDatabaseMissing('users', ['email' => $data['email']]);
+
+        $this->actingAs($this->root)
+            ->post(route('dashboard.develusers.users.store'), $data)
+            ->assertStatus(201);
+
+        $this->assertDatabaseHas('users', ['email' => $data['email']]);
+
+        // Assert the role was assigned to the user
+        $user = $this->userModel::where('email', $data['email'])->first();
+
+        $this->assertCount(0, $user->roles);
+    }
+
+    /** @test */
     public function roots_can_view_users()
     {
         $user = factory($this->userModel)->create();
