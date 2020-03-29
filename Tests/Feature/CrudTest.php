@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Devel\Database\Seeders\DevelDatabaseSeeder;
+use Devel\Models\Auth\Role;
 use Modules\DevelDashboard\Database\Seeders\DevelDashboardDatabaseSeeder;
 
 class CrudTest extends TestCase
@@ -72,7 +73,7 @@ class CrudTest extends TestCase
             'name' => 'user',
             'email' => 'user@example.com',
             'password' => 'qwerty1234',
-            'roles' => null,
+            'roles' => [],
         ];
 
         $this->assertDatabaseMissing('users', ['email' => $data['email']]);
@@ -125,6 +126,37 @@ class CrudTest extends TestCase
         ]);
 
         $this->assertTrue(Hash::check($data['password'], $user->password));
+    }
+
+    /** @test */
+    public function all_user_roles_can_be_detached()
+    {
+        $user = factory($this->userModel)->create();
+        $user->roles()->attach(factory(Role::class)->create()->key);
+
+        $data = [
+            'name' => 'user',
+            'email' => 'user@example.com',
+            'password' => 'qwerty1234',
+            'roles' => [],
+        ];
+
+        $this->actingAs($this->root)
+            ->post(route('dashboard.develusers.users.update', $user->id), $data)
+            ->assertStatus(200);
+
+        $user = $user->refresh();
+
+        $this->assertEquals([
+            'name' => $data['name'],
+            'email' => $data['email'],
+        ], [
+            'name' => $user['name'],
+            'email' => $user['email'],
+        ]);
+
+        $this->assertTrue(Hash::check($data['password'], $user->password));
+        $this->assertCount(0, $user->roles);
     }
 
     /** @test */
@@ -203,7 +235,7 @@ class CrudTest extends TestCase
             $user->roles[0]['key']
         );
     }
-    
+
     /** @test */
     public function granting_personal_permissions_requires_a_special_permission()
     {
