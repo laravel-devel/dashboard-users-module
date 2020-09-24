@@ -11,13 +11,13 @@ Route::group([
             'as' => 'develusers.users.index',
             'uses' => 'UsersController@index',
             'dashboardSidebar' => 'Manage Users->Users',
-            'permissions' => 'users.list',
+            'permissions' => 'users.browse',
         ]);
 
         Route::get('/list', [
             'as' => 'develusers.users.get',
             'uses' => 'UsersController@get',
-            'permissions' => 'users.list',
+            'permissions' => 'users.browse',
         ]);
 
         Route::get('/add', [
