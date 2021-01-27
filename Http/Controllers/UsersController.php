@@ -235,21 +235,13 @@ class UsersController extends Controller
      * Determine whether an item can be edited.
      *
      * @param Request $request
-     * @param mixed $id
+     * @param mixed $item
      * @return mixed
      */
-    protected function canBeEdited($request, $id)
+    protected function canBeEdited($request, $item)
     {
-        $model = new $this->modelClass;
-
-        $object = ($this->model())::where($model->getRouteKeyName(), $id)->first();
-
-        if (!$object) {
-            return 'Item with provided id was not found!';
-        }
-
         // No one can edit the root profile except for the root itself
-        if ($object->roles->contains('root') && $request->user()->id !== $object->id) {
+        if ($item->roles->contains('root') && $request->user()->id !== $item->id) {
             return 'The Root user cannot be edited!';
         }
 
